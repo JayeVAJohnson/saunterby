@@ -7,6 +7,7 @@ A membership for adults 55+ who want to stay active, capable, and engaged — cu
 
 This repository is self-contained: the landing page, the pitch deck, supporting docs, and the full version history that led here, with no external hosting dependency.
 
+-
 ## Demo media
 
 **30-second product demo:**

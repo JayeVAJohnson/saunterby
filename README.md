@@ -1,6 +1,6 @@
 # Saunterby
 
-A membership for adults 55+ who want to stay active, capable, and engaged — curated experiences, transportation, and benefits navigation handled by a real Navigator, not an app you have to figure out alone.
+A membership for adults 55+ who want to stay active, capable, and engaged — curated experiences, transportation, and benefits navigation handled by a human Navigator Team.
 
 **This repository** contains the full source and materials for Saunterby, published independently on GitHub.
 **Interactive demo:** [`/demo`](./demo) — a simplified, static walkthrough for illustration, not the full site

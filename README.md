@@ -3,7 +3,7 @@
 A membership for adults 55+ who want to stay active, capable, and engaged — curated experiences, transportation, and benefits navigation handled by a human Navigator Team.
 
 **This repository** contains the full source and materials for Saunterby, published independently on GitHub.
-**Interactive demo:** [`/demo`](./demo) — a simplified, static walkthrough for illustration, not the full site
+**Interactive demo:** [`/demo`](./demo) — a simplified, static walkthrough for illustration.
 
 This repository is self-contained: the landing page, the pitch deck, supporting docs, and the full version history that led here, with no external hosting dependency.
 

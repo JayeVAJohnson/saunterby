@@ -22,34 +22,7 @@ This repository is self-contained: the landing page, the pitch deck, supporting 
 ![Saunterby outro card](./media/saunterby-outro.gif)
 
 ---
-
-## Repo structure
-
-```
-saunterby/
-├── index.html              — the live landing page (current version)
-├── demo/                   — simplified interactive demo page (static, illustrative only)
-│   └── index.html
-├── deck/                   — pitch deck, current (Saunterby-branded)
-│   ├── Saunterby-Built-to-Keep-Going-Deck.pptx
-│   └── Saunterby-Built-to-Keep-Going-Deck.pdf
-├── docs/                   — supporting documents, current
-│   ├── saunterby-application-answers.md
-│   ├── pitch-narrative.md
-│   ├── mvp-launch-plan.md
-│   └── crm-template.csv
-├── media/                  — demo assets
-│   ├── saunterby_demo.mp4  — recorded 30-second product demo
-│   ├── saunterby-demo.gif  — interactive site walkthrough
-│   └── saunterby-outro.gif — 10-second brand end card
-├── archive/                — historical versions, preserved as-is
-│   ├── landing-pages/      — every landing page iteration, v1–v12
-│   ├── pitch-narratives/   — pitch narrative drafts v1–v4
-│   ├── EmberActive-Built-to-Keep-Going-Deck.pptx  — deck as originally submitted
-│   └── ember-application-answers.md               — application as originally submitted
-├── INTERNAL-changelog.md   — chronological, line-by-line build log (internal use)
-└── CHANGELOG.md            — public-facing changelog (added separately)
-```
+ 
 
 ## A note on naming history
 

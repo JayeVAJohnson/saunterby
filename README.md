@@ -22,8 +22,4 @@ This repository is self-contained: the landing page, the pitch deck, supporting 
 ![Saunterby outro card](./media/saunterby-outro.gif)
 
 ---
- 
-
-## A note on naming history
-
-This project was built and initially submitted under the working names **Ember**, then **EmberActive**. It was renamed to **Saunterby** after submission, for reasons documented in `INTERNAL-changelog.md`. The `archive/` folder preserves the EmberActive-branded submission materials exactly as filed — that record is intentionally left untouched. Everything outside `archive/` reflects the current Saunterby brand.
+  

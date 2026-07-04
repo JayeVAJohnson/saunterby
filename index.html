@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Saunterby — Built to thrive on. (v13)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;900&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Active Wellness palette — replaces the earlier navy/coral scheme */
+    --ink:#262B29;           /* charcoal, used for dark section fields */
+    --ink-soft:#323836;      /* lighter charcoal for cards/insets */
+    --parchment:#F3ECDD;     /* warm cream base, unchanged */
+    --parchment-dim:#E9E0CC;
+    --coral:#C6416F;         /* raspberry pink — primary accent / CTA */
+    --coral-dark:#A32F58;    /* raspberry, darker hover state */
+    --gold:#8CA37E;          /* pesto/sage green — secondary accent, tags, eyebrows */
+    --teal:#2E97CC;          /* bright sky blue — tertiary accent */
+    --text-light:#F7F1E4;
+    --text-dark:#1C2630;
+    --line: rgba(247,241,228,0.18);
+    --line-dark: rgba(28,38,48,0.15);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--text-light);
+    font-family:'Work Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:'Big Shoulders Display', sans-serif;
+    text-transform:uppercase;
+    letter-spacing:0.01em;
+    margin:0;
+    line-height:0.95;
+  }
+  .mono{
+    font-family:'IBM Plex Mono', monospace;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+  }
+  a{color:inherit;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+  @media (max-width:640px){ .wrap{padding:0 20px;} }
+
+  /* ---------- NAV ---------- */
+  nav{position:sticky;top:0;z-index:50;background:var(--ink);border-bottom:1px solid var(--line);}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;padding-top:18px;padding-bottom:18px;flex-wrap:wrap;gap:12px;}
+  @media (max-width:480px){
+    nav .wrap{padding-top:14px;padding-bottom:14px;}
+    .logo{font-size:20px;}
+    .nav-cta{font-size:10.5px;padding:8px 14px;}
+  }
+  .logo{font-family:'Big Shoulders Display', sans-serif;font-weight:900;font-size:26px;letter-spacing:0.03em;display:flex;align-items:center;gap:8px;}
+  .logo .dot{width:10px;height:10px;border-radius:50%;background:var(--coral);box-shadow:0 0 0 3px rgba(198,65,111,0.25);}
+  .version-chip{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--gold);
+    border:1px solid var(--gold);padding:2px 7px;border-radius:2px;margin-left:2px;
+  }
+  .nav-cta{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;
+    background:var(--coral);color:var(--text-light);padding:10px 18px;border-radius:2px;
+    text-decoration:none;border:1px solid var(--coral);transition:background .15s ease;
+  }
+  .nav-cta:hover{background:transparent;}
+
+  /* ---------- HERO ---------- */
+  header.hero{padding:72px 0 96px;position:relative;overflow:hidden;}
+  .hero-grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:56px;align-items:center;}
+  @media (max-width:900px){ .hero-grid{grid-template-columns:1fr;} }
+  .eyebrow{font-size:13px;color:var(--gold);margin-bottom:18px;display:flex;align-items:center;gap:10px;}
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--gold);display:inline-block;}
+  h1.headline{font-size:clamp(48px,7vw,92px);font-weight:900;color:var(--text-light);}
+  h1.headline .accent{color:var(--coral);}
+  .hero-sub{margin-top:26px;max-width:48ch;font-size:18px;line-height:1.55;color:rgba(247,241,228,0.82);}
+  .waitlist-form{margin-top:34px;display:flex;gap:0;max-width:440px;border:1px solid var(--line);border-radius:3px;overflow:hidden;}
+  .waitlist-form input[type=email]{flex:1;border:none;background:var(--ink-soft);color:var(--text-light);padding:15px 16px;font-family:'Work Sans',sans-serif;font-size:15px;outline:none;}
+  .waitlist-form input::placeholder{color:rgba(247,241,228,0.45);}
+  .waitlist-form button{border:none;background:var(--coral);color:var(--text-light);padding:0 22px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;transition:background .15s ease;}
+  .waitlist-form button:hover{background:var(--coral-dark);}
+  .form-note{margin-top:12px;font-size:12.5px;color:rgba(247,241,228,0.5);}
+  .form-confirm{display:none;margin-top:16px;padding:12px 16px;border:1px dashed var(--gold);color:var(--gold);font-family:'IBM Plex Mono',monospace;font-size:13px;border-radius:2px;}
+
+  /* ---------- BOARDING PASS CARD ---------- */
+  .pass-card{background:var(--parchment);color:var(--text-dark);border-radius:6px;position:relative;box-shadow:0 30px 60px -20px rgba(0,0,0,0.55);transform:rotate(2deg);}
+  .pass-top{padding:26px 26px 20px;display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px dashed var(--line-dark);position:relative;}
+  .pass-top::before,.pass-top::after{content:"";position:absolute;bottom:-11px;width:22px;height:22px;background:var(--ink);border-radius:50%;}
+  .pass-top::before{left:-11px;} .pass-top::after{right:-11px;}
+  .pass-brand{font-family:'Big Shoulders Display',sans-serif;font-weight:900;font-size:22px;}
+  .pass-tag{font-size:10px;color:var(--teal);margin-top:4px;}
+  .pass-badge{background:var(--coral);color:var(--text-light);font-family:'IBM Plex Mono',monospace;font-size:10px;padding:5px 10px;border-radius:2px;letter-spacing:0.06em;}
+  .pass-body{padding:24px 26px 10px;}
+  .pass-row{display:flex;justify-content:space-between;gap:16px;margin-bottom:18px;}
+  .pass-field-label{font-size:10px;color:var(--teal);margin-bottom:5px;}
+  .pass-field-value{font-family:'Big Shoulders Display',sans-serif;font-weight:700;font-size:20px;text-transform:uppercase;}
+  .pass-bottom{padding:16px 26px 26px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line-dark);}
+  .barcode{height:34px;flex:1;margin-right:16px;background:repeating-linear-gradient(90deg, var(--text-dark) 0 2px, transparent 2px 5px);opacity:0.75;}
+  .pass-number{font-size:11px;color:var(--text-dark);opacity:0.6;white-space:nowrap;}
+
+  /* ---------- SECTION HEAD (shared) ---------- */
+  .section-head{max-width:640px;margin-bottom:56px;}
+  .section-head .eyebrow{color:var(--coral-dark);}
+  .section-head .eyebrow::before{background:var(--coral-dark);}
+  .section-head h2{font-size:clamp(32px,4.5vw,52px);color:var(--text-dark);}
+  section.on-dark .section-head h2{color:var(--text-light);}
+  section.on-dark .section-head .eyebrow{color:var(--gold);}
+  section.on-dark .section-head .eyebrow::before{background:var(--gold);}
+
+  /* ---------- HOW IT WORKS ---------- */
+  section.how{background:var(--parchment);color:var(--text-dark);padding:96px 0;}
+  .stub-row{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  @media (max-width:900px){ .stub-row{grid-template-columns:1fr;} }
+  .stub{background:var(--ink);color:var(--text-light);border-radius:4px;overflow:hidden;display:flex;flex-direction:column;}
+  .stub-num{font-family:'Big Shoulders Display',sans-serif;font-weight:900;font-size:15px;color:var(--gold);padding:18px 22px 0;}
+  .stub-title{padding:8px 22px 0;font-size:22px;font-weight:700;}
+  .stub-desc{padding:14px 22px 24px;font-size:14.5px;line-height:1.55;color:rgba(247,241,228,0.72);}
+  .stub-divider{margin:0 22px;border-top:1px dashed var(--line);}
+
+  /* ---------- GETTING THERE (transport + check-in) ---------- */
+  section.transit{background:var(--ink);padding:96px 0;}
+  .transit-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+  @media (max-width:900px){ .transit-grid{grid-template-columns:1fr;} }
+  .ride-card{background:var(--parchment);color:var(--text-dark);border-radius:6px;padding:28px;box-shadow:0 24px 50px -18px rgba(0,0,0,0.5);}
+  .ride-status{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+  .ride-dot{width:9px;height:9px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 4px rgba(46,151,204,0.2);}
+  .ride-status-text{font-size:11px;color:var(--teal);}
+  .ride-route{display:flex;flex-direction:column;gap:0;margin:14px 0 20px;position:relative;padding-left:22px;}
+  .ride-point{position:relative;padding:10px 0;font-size:15px;font-weight:600;}
+  .ride-point::before{content:"";position:absolute;left:-22px;top:16px;width:10px;height:10px;border-radius:50%;background:var(--coral);}
+  .ride-point.dest::before{background:var(--teal);}
+  .ride-line{position:absolute;left:-17px;top:24px;bottom:24px;width:1px;background:var(--line-dark);}
+  .ride-sub{font-size:12.5px;color:rgba(28,38,48,0.6);margin-top:2px;}
+  .ride-foot{display:flex;justify-content:space-between;align-items:center;border-top:1px dashed var(--line-dark);padding-top:16px;font-size:12px;color:var(--teal);}
+  .feature-list{list-style:none;margin:22px 0 0;padding:0;display:flex;flex-direction:column;gap:20px;}
+  .feature-list li{display:flex;gap:16px;align-items:flex-start;}
+  .feature-num{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gold);border:1px solid var(--gold);border-radius:50%;width:26px;height:26px;flex:none;display:flex;align-items:center;justify-content:center;}
+  .feature-copy strong{display:block;font-size:16px;margin-bottom:4px;}
+  .feature-copy span{font-size:14px;color:rgba(247,241,228,0.72);line-height:1.5;}
+
+  /* ---------- ACTIVITIES ---------- */
+  section.activities{background:var(--parchment);padding:96px 0 110px;color:var(--text-dark);}
+  .activity-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  @media (max-width:900px){ .activity-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:600px){ .activity-grid{grid-template-columns:1fr;} }
+  .ticket{background:var(--ink);color:var(--text-light);border-radius:4px;position:relative;padding-bottom:16px;}
+  .ticket-notch{position:absolute;top:64px;left:-9px;width:18px;height:18px;background:var(--parchment);border-radius:50%;}
+  .ticket-notch.right{left:auto;right:-9px;}
+  .ticket-img{height:90px;border-radius:4px 4px 0 0;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.06em;color:rgba(247,241,228,0.35);text-transform:uppercase;}
+  .ticket-body{padding:20px 20px 0;}
+  .ticket-cat{font-size:10px;color:var(--gold);margin-bottom:6px;}
+  .ticket-title{font-family:'Big Shoulders Display',sans-serif;font-weight:800;font-size:22px;text-transform:none;line-height:1.05;}
+  .ticket-desc{font-size:13px;margin-top:8px;line-height:1.5;color:rgba(247,241,228,0.72);}
+  .accom-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+  .accom-tag{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.04em;text-transform:uppercase;background:rgba(140,163,126,0.15);color:var(--gold);border:1px solid rgba(140,163,126,0.4);padding:4px 8px;border-radius:2px;}
+  .ticket-foot{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding:14px 20px 0;border-top:1px dashed var(--line);}
+  .ticket-duration{font-size:11px;color:var(--teal);}
+  .ticket-cta{font-size:11px;color:var(--coral);text-decoration:none;font-weight:600;border-bottom:1px solid var(--coral);padding-bottom:1px;}
+
+  /* ---------- ALREADY COVERED (ecosystem) ---------- */
+  section.ecosystem{background:var(--parchment);padding:96px 0;color:var(--text-dark);}
+  .eco-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  @media (max-width:900px){ .eco-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:560px){ .eco-grid{grid-template-columns:1fr;} }
+  .eco-card{background:var(--ink);color:var(--text-light);border-radius:5px;padding:22px 22px;}
+  .eco-name{font-family:'Big Shoulders Display',sans-serif;font-weight:800;font-size:19px;margin-bottom:8px;}
+  .eco-desc{font-size:13px;line-height:1.5;color:rgba(247,241,228,0.7);}
+  .eco-note{
+    margin-top:32px;background:var(--ink-soft);border-left:3px solid var(--gold);
+    padding:22px 28px;border-radius:0 4px 4px 0;
+  }
+  .eco-note p{margin:0;font-size:15px;line-height:1.6;color:rgba(247,241,228,0.88);}
+
+  /* ---------- RURAL / EXTRA ASSIST CALLOUT ---------- */
+  .assist-callout{
+    margin-top:32px;background:var(--parchment);color:var(--text-dark);
+    border-radius:6px;padding:26px 30px;display:flex;gap:20px;align-items:flex-start;
+  }
+  .assist-callout .badge{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--coral-dark);border:1px solid var(--coral-dark);padding:4px 9px;border-radius:2px;flex:none;margin-top:2px;white-space:nowrap;}
+  .assist-callout p{margin:0;font-size:14.5px;line-height:1.6;color:rgba(28,38,48,0.82);}
+  .assist-callout.on-dark{background:var(--ink-soft);color:var(--text-light);}
+  .assist-callout.on-dark p{color:rgba(247,241,228,0.85);}
+  .assist-callout.on-dark .badge{color:var(--gold);border-color:var(--gold);}
+
+  /* ---------- PASS TIERS ---------- */
+  .tier-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-bottom:36px;}
+  @media (max-width:800px){ .tier-grid{grid-template-columns:1fr;} }
+  .tier-card{background:var(--parchment);color:var(--text-dark);border-radius:6px;padding:32px;}
+  .tier-label{font-size:11px;color:var(--coral-dark);margin-bottom:10px;}
+  .tier-card h3{font-size:24px;text-transform:none;margin-bottom:12px;}
+  .tier-card p{font-size:14.5px;line-height:1.6;color:rgba(28,38,48,0.75);margin:0 0 16px;}
+  .tier-fit{font-size:12.5px;color:var(--teal);}
+  .tier-fit strong{color:var(--text-dark);}
+
+  /* ---------- PAYING YOUR WAY ---------- */
+  section.paying{background:var(--ink);padding:96px 0;}
+  .pay-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+  @media (max-width:900px){ .pay-grid{grid-template-columns:1fr;} }
+  .pay-card{background:var(--parchment);color:var(--text-dark);border-radius:6px;padding:30px;}
+  .pay-icon{width:38px;height:38px;border-radius:50%;background:var(--coral);color:var(--text-light);display:flex;align-items:center;justify-content:center;font-family:'Big Shoulders Display',sans-serif;font-weight:900;font-size:16px;margin-bottom:18px;}
+  .pay-card h3{font-size:20px;text-transform:none;margin-bottom:10px;}
+  .pay-card p{font-size:14px;line-height:1.55;color:rgba(28,38,48,0.75);margin:0;}
+  .concierge-note{
+    margin-top:36px;background:var(--ink-soft);border:1px dashed var(--gold);border-radius:6px;
+    padding:26px 30px;display:flex;gap:20px;align-items:flex-start;
+  }
+  .concierge-note .badge{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--gold);border:1px solid var(--gold);padding:4px 9px;border-radius:2px;flex:none;margin-top:2px;}
+  .concierge-note p{margin:0;font-size:14.5px;line-height:1.6;color:rgba(247,241,228,0.85);}
+
+  /* ---------- FOOTER CTA ---------- */
+  section.cta{background:var(--coral);padding:88px 0;text-align:center;}
+  section.cta h2{color:var(--text-light);font-size:clamp(34px,5.5vw,56px);}
+  section.cta p{color:rgba(247,241,228,0.9);max-width:52ch;margin:18px auto 0;font-size:16px;}
+  .cta-form{margin:32px auto 0;display:flex;justify-content:center;gap:0;max-width:440px;border:1px solid rgba(247,241,228,0.4);border-radius:3px;overflow:hidden;}
+  .cta-form input[type=email]{flex:1;border:none;background:rgba(0,0,0,0.15);color:var(--text-light);padding:15px 16px;font-family:'Work Sans',sans-serif;font-size:15px;outline:none;}
+  .cta-form input::placeholder{color:rgba(247,241,228,0.6);}
+  .cta-form button{border:none;background:var(--ink);color:var(--text-light);padding:0 22px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;}
+
+  footer{background:var(--parchment);color:var(--text-dark);padding:36px 0;border-top:1px solid var(--line-dark);}
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+  footer .foot-note{font-size:12.5px;color:rgba(28,38,48,0.55);}
+
+
+  /* ---------- ON-PAGE DESIGNED WAITLIST FORM ---------- */
+  .wl-section{background:var(--ink);padding:80px 0 90px;}
+  .wl-card{
+    max-width:680px;margin:0 auto;background:var(--parchment);border-radius:8px;overflow:hidden;
+    box-shadow:0 30px 70px -15px rgba(0,0,0,0.5);color:var(--text-dark);display:block;text-decoration:none;
+  }
+  .wl-head{background:var(--ink);color:var(--text-light);padding:34px 40px 28px;border-bottom:2px dashed var(--line);}
+  .wl-head .eyebrow{color:var(--gold);margin-bottom:8px;}
+  .wl-head h2{font-family:'Big Shoulders Display',sans-serif;text-transform:uppercase;font-size:32px;margin:0 0 10px;color:var(--text-light);}
+  .wl-head p{font-size:13.5px;color:rgba(247,241,228,0.78);margin:0;max-width:52ch;line-height:1.55;}
+  .wl-body{padding:36px 40px 44px;}
+  .wl-tag{font-size:10.5px;color:var(--teal);margin-bottom:18px;}
+  .wl-field{margin-bottom:24px;}
+  .wl-label{font-family:'Big Shoulders Display',sans-serif;font-size:17px;margin-bottom:5px;}
+  .wl-req{color:var(--coral);margin-left:3px;}
+  .wl-help{font-size:12px;color:rgba(28,38,48,0.55);margin-bottom:8px;}
+  .wl-input{
+    width:100%;border:none;border-bottom:2px solid var(--line-dark);padding:9px 2px;background:transparent;
+    font-family:'Work Sans',sans-serif;font-size:14.5px;color:rgba(28,38,48,0.45);
+  }
+  .wl-chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px;}
+  .wl-chip{
+    display:flex;align-items:center;gap:8px;background:var(--ink);color:var(--text-light);
+    border-radius:20px;padding:9px 16px 9px 12px;font-size:13px;
+  }
+  .wl-chip .box{width:14px;height:14px;border:1.5px solid var(--gold);border-radius:3px;flex:none;}
+  .wl-divider{border:none;border-top:1px dashed var(--line-dark);margin:30px 0;}
+  .wl-submit-row{margin-top:34px;display:flex;justify-content:flex-end;}
+  .wl-submit{
+    font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:0.06em;text-transform:uppercase;
+    background:var(--coral);color:var(--text-light);border:none;border-radius:3px;padding:14px 28px;
+  }
+  .wl-foot{background:var(--ink);color:rgba(247,241,228,0.55);padding:16px 40px;font-size:11px;display:flex;justify-content:space-between;align-items:center;}
+  .wl-barcode{height:20px;width:110px;background:repeating-linear-gradient(90deg, var(--text-light) 0 2px, transparent 2px 5px);opacity:0.4;}
+  @media (max-width:600px){ .wl-head, .wl-body{padding-left:24px;padding-right:24px;} .wl-foot{padding-left:24px;padding-right:24px;} }
+
+  /* ---------- FLOATING FORM TAB + GRAPHIC MODAL ---------- */
+  .form-tab{
+    position:fixed;top:50%;right:0;transform:translateY(-50%) rotate(-90deg) translateX(50%);
+    transform-origin:right center;
+    background:var(--coral);color:var(--text-light);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;
+    padding:12px 22px;border-radius:6px 6px 0 0;cursor:pointer;z-index:80;border:none;
+    box-shadow:0 6px 18px -6px rgba(0,0,0,0.4);
+  }
+  .form-tab:hover{background:var(--coral-dark);}
+  a.form-tab{text-decoration:none;display:inline-block;}
+  html{scroll-behavior:smooth;}
+  .modal-overlay{
+    display:none;position:fixed;inset:0;background:rgba(28,38,48,0.72);z-index:90;
+    align-items:center;justify-content:center;padding:24px;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal-close{
+    position:absolute;top:18px;right:22px;background:none;border:none;color:var(--text-light);
+    font-size:26px;line-height:1;cursor:pointer;font-family:'Work Sans',sans-serif;
+  }
+  .modal-card{
+    max-width:480px;width:100%;max-height:90vh;overflow:auto;text-decoration:none;display:block;
+    background:var(--parchment);border-radius:8px;box-shadow:0 30px 70px -15px rgba(0,0,0,0.5);
+    position:relative;color:var(--text-dark);
+  }
+  .modal-head{background:var(--ink);color:var(--text-light);padding:28px 30px 22px;border-bottom:2px dashed var(--line);}
+  .modal-head .eyebrow{color:var(--gold);margin-bottom:8px;}
+  .modal-head h3{font-family:'Big Shoulders Display',sans-serif;text-transform:uppercase;font-size:26px;margin:0 0 8px;}
+  .modal-head p{font-size:13px;color:rgba(247,241,228,0.78);margin:0;max-width:36ch;}
+  .modal-body{padding:26px 30px 32px;}
+  .modal-field{margin-bottom:16px;}
+  .modal-field-label{font-family:'Big Shoulders Display',sans-serif;font-size:14px;margin-bottom:5px;}
+  .modal-field-fake{border-bottom:2px solid var(--line-dark);padding:8px 2px;font-size:13px;color:rgba(28,38,48,0.35);}
+  .modal-cta{
+    margin-top:20px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:12px;
+    letter-spacing:0.06em;text-transform:uppercase;background:var(--coral);color:var(--text-light);
+    padding:14px;border-radius:4px;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="logo"><span class="dot"></span>SAUNTERBY <span class="version-chip">v13</span></div>
+    <a class="nav-cta" href="#join">Join the waitlist</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow mono">A membership for body, mind, and everything active</div>
+      <h1 class="headline">Built to<br><span class="accent">thrive on.</span></h1>
+      <p class="hero-sub"><strong>Find your spark.</strong> Enjoy one membership for hiking days, qigong, painting workshops, wine tastings, trivia to enhance your mind, live music, and the excursions you've been meaning to try &mdash; open to every member exactly as they are, whether that includes managing a health condition or not. You choose what sounds fun. We handle the rest, including the ride there and back.</p>
+      <p class="hero-sub" style="margin-top:14px;font-size:15px;color:rgba(247,241,228,0.62);">Built with people 50+ in mind &mdash; but like AARP, Saunterby welcomes every age. Bring a friend, a family member, or a care partner along whenever you'd like the company.</p>
+
+      <p style="margin-top:18px;">
+        <a href="media/saunterby_demo.mp4" target="_blank" rel="noopener" style="color:var(--coral);font-size:14px;font-weight:600;text-decoration:none;border-bottom:1.5px solid var(--coral);padding-bottom:1px;">&#9654; Click to see more</a>
+      </p>
+
+      <form class="waitlist-form" id="waitlistForm">
+        <input type="email" id="waitlistEmail" placeholder="you@email.com" required />
+        <button type="submit">Join waitlist</button>
+      </form>
+      <div class="form-note">We're onboarding our first members now. We'll reach out soon!</div>
+      <div class="form-confirm" id="formConfirm">✓ You're on the list. Watch your inbox &mdash; we reply personally.</div>
+    </div>
+
+    <div class="pass-card">
+      <div class="pass-top">
+        <div>
+          <div class="pass-brand">SAUNTERBY</div>
+          <div class="pass-tag mono">Active membership</div>
+        </div>
+        <div class="pass-badge mono">Founding member</div>
+      </div>
+      <div class="pass-body">
+        <div class="pass-row">
+          <div>
+            <div class="pass-field-label mono">Member</div>
+            <div class="pass-field-value">You &amp; Yours</div>
+          </div>
+          <div>
+            <div class="pass-field-label mono">Access</div>
+            <div class="pass-field-value">All-Access</div>
+          </div>
+        </div>
+        <div class="pass-row">
+          <div>
+            <div class="pass-field-label mono">This month</div>
+            <div class="pass-field-value">6 experiences</div>
+          </div>
+          <div>
+            <div class="pass-field-label mono">Rate</div>
+            <div class="pass-field-value">BEST RATE</div>
+          </div>
+        </div>
+      </div>
+      <div class="pass-bottom">
+        <div class="barcode"></div>
+        <div class="pass-number mono">NO. 004,821</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="how">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow mono">How it works</div>
+      <h2>Three steps.<br>All yours to choose.</h2>
+    </div>
+    <div class="stub-row">
+      <div class="stub">
+        <div class="stub-num mono">Step 01</div>
+        <div class="stub-title">Choose your plan</div>
+        <div class="stub-divider"></div>
+        <div class="stub-desc">Choose the rate that fits your life &mdash; full price, sliding scale, or benefit dollars from a wellness card. Your Navigator helps you sort out the details.</div>
+      </div>
+      <div class="stub">
+        <div class="stub-num mono">Step 02</div>
+        <div class="stub-title">Book what looks fun</div>
+        <div class="stub-divider"></div>
+        <div class="stub-desc">Browse a rotating lineup of local classes, tastings, and excursions, each one tagged with the accommodations it offers. Tap reserve.</div>
+      </div>
+      <div class="stub">
+        <div class="stub-num mono">Step 03</div>
+        <div class="stub-title">Show up, your way</div>
+        <div class="stub-divider"></div>
+        <div class="stub-desc">Get picked up, get there, and let someone know you arrived safe &mdash; all arranged for you if you'd like the help.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="transit on-dark">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow mono">Getting there, and back</div>
+      <h2>Your ride, arranged for you</h2>
+    </div>
+    <div class="transit-grid">
+      <ul class="feature-list">
+        <li>
+          <div class="feature-num">1</div>
+          <div class="feature-copy"><strong>Matched to whatever actually works nearby</strong><span>Your Navigator arranges the ride through whichever vetted network fits &mdash; Uber, Lyft, a local volunteer-driver program, or non-emergency transport &mdash; instead of locking every member to one option.</span></div>
+        </li>
+        <li>
+          <div class="feature-num">2</div>
+          <div class="feature-copy"><strong>Every driver network is vetted before we use it</strong><span>Licensing, insurance, and accessibility equipment are confirmed in advance, and any fees are shown to you upfront &mdash; no surprise charges at pickup.</span></div>
+        </li>
+        <li>
+          <div class="feature-num">3</div>
+          <div class="feature-copy"><strong>A companion, if you'd like one</strong><span>For members who want more than a ride, we can arrange a background-checked companion, sourced through vetted caregiver networks, to ride along and stay for the activity.</span></div>
+        </li>
+        <li>
+          <div class="feature-num">4</div>
+          <div class="feature-copy"><strong>Arrival confirmation for anyone who wants it</strong><span>If you'd like a family member or friend looped in, we'll send a simple confirmation when you're dropped off and picked up &mdash; entirely opt-in.</span></div>
+        </li>
+      </ul>
+      <div class="ride-card">
+        <div class="ride-status">
+          <div class="ride-dot"></div>
+          <div class="ride-status-text mono">Ride confirmed &middot; arriving in 6 min</div>
+        </div>
+        <div class="ride-route">
+          <div class="ride-line"></div>
+          <div class="ride-point">Home pickup<div class="ride-sub">Extra time requested &middot; ramp needed</div></div>
+          <div class="ride-point dest">Watercolor Sunday, Maple Studio<div class="ride-sub">Drop-off confirmation sent to 1 contact</div></div>
+        </div>
+        <div class="ride-foot">
+          <span>Arranged by your Navigator</span>
+          <span>Round trip included</span>
+        </div>
+      </div>
+    </div>
+    <div class="assist-callout">
+      <div class="badge mono">Rural &amp; extended pickup</div>
+      <p>On-demand rides work well close to town, but they thin out fast in rural areas. For members further out, your Navigator can arrange extended pickup through local volunteer-driver networks or non-emergency medical transport partners, for an added assist fee. You'll always know the cost before you book &mdash; no surprises.</p>
+    </div>
+    <div class="assist-callout on-dark">
+      <div class="badge mono">Why vetting matters</div>
+      <p>Senior-focused ride services already exist, and their track record is instructive: riders have reported cancellations, per-minute fees they weren't told about upfront, and vehicles that couldn't accommodate a walker or wheelchair. That's exactly the standard Saunterby vets against &mdash; every driver network we work with is checked for licensing, insurance, and accessibility capability before we use it, and every fee is disclosed before a member books, not after.</p>
+    </div>
+  </div>
+</section>
+
+<section class="ecosystem">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow mono">One membership, everywhere you're already covered</div>
+      <h2>Bring what you have.<br>We'll fit it in.</h2>
+    </div>
+    <div class="eco-grid">
+      <div class="eco-card">
+        <div class="eco-name">Medicare Advantage wellness &amp; flex cards</div>
+        <div class="eco-desc">Many plans include an allowance for wellness activities and services. Your Advocate helps you use it here.</div>
+      </div>
+      <div class="eco-card">
+        <div class="eco-name">SilverSneakers</div>
+        <div class="eco-desc">Already have a membership? We'll route you to in-network fitness classes and count them toward your membership.</div>
+      </div>
+      <div class="eco-card">
+        <div class="eco-name">Silver&amp;Fit</div>
+        <div class="eco-desc">Home fitness kits and studio access from your plan, folded into the same calendar as everything else.</div>
+      </div>
+      <div class="eco-card">
+        <div class="eco-name">One Pass</div>
+        <div class="eco-desc">Bundled gym and class credits through your employer or plan &mdash; we'll help you spend them alongside your Saunterby activities.</div>
+      </div>
+      <div class="eco-card">
+        <div class="eco-name">FitOn Health &amp; similar plan partners</div>
+        <div class="eco-desc">Program names and partners shift year to year. Whatever your plan currently offers, tell your Advocate and we'll work with it.</div>
+      </div>
+      <div class="eco-card">
+        <div class="eco-name">ClassPass</div>
+        <div class="eco-desc">Already have ClassPass credits? Use them toward eligible fitness classes on your Saunterby calendar, right alongside everything else.</div>
+      </div>
+      <div class="eco-card">
+        <div class="eco-name">Local senior centers &amp; vendor discounts</div>
+        <div class="eco-desc">Free community classes and everyday senior discounts don't show up in one place today. We'll surface them next to everything else.</div>
+      </div>
+    </div>
+    <div class="eco-note">
+      <p>Most members already have two or three of these scattered across different cards, apps, and phone numbers. Saunterby doesn't ask you to give any of them up &mdash; it's the one calendar, with a Navigator and Advocate on your side, that helps you use all of them well.</p>
+    </div>
+    <div class="assist-callout" style="margin-top:20px;">
+      <div class="badge mono">PACE participants</div>
+      <p>PACE (Program of All-Inclusive Care for the Elderly) works differently &mdash; participants receive transportation and recreational services through their own PACE care team, and generally can't book outside services directly. For PACE members, Saunterby's role is to become a vetted community activity partner that a participant's care team can choose to arrange, rather than something booked directly through Saunterby.</p>
+    </div>
+  </div>
+</section>
+
+<section class="activities">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow mono">This week's lineup</div>
+      <h2>For the body and the mind</h2>
+      <p style="margin-top:16px;font-size:15.5px;line-height:1.6;color:rgba(28,38,48,0.72);">Not just leisure &mdash; movement practices like qigong, memory and learning sessions like trivia, and everything in between.</p>
+    </div>
+    <div class="activity-grid">
+
+      <div class="ticket">
+        <div class="ticket-notch"></div><div class="ticket-notch right"></div>
+        <div class="ticket-img" style="background:#2E3B2C;">morning park</div>
+        <div class="ticket-body">
+          <div class="ticket-cat mono">Movement</div>
+          <div class="ticket-title">Qigong at Sunrise</div>
+          <div class="ticket-desc">Slow, guided breath-and-movement practice in a local park. Gentle on the joints, grounding for the mind.</div>
+          <div class="accom-tags"><span class="accom-tag">Seated option</span><span class="accom-tag">Adjustable pace</span></div>
+        </div>
+        <div class="ticket-foot">
+          <div class="ticket-duration mono">1 HR</div>
+          <a class="ticket-cta" href="https://docs.google.com/forms/d/e/1FAIpQLSc1AjPhKJ-h8THwsUmltYlM3a4mO9tKdsy1CMMunL63yKx8bA/viewform" target="_blank">Reserve →</a>
+        </div>
+      </div>
+
+      <div class="ticket">
+        <div class="ticket-notch"></div><div class="ticket-notch right"></div>
+        <div class="ticket-img" style="background:#2C3A45;">community room</div>
+        <div class="ticket-body">
+          <div class="ticket-cat mono">Mind &amp; Learning</div>
+          <div class="ticket-title">Trivia Night</div>
+          <div class="ticket-desc">A lively, low-pressure trivia hour designed to exercise memory and recall &mdash; teams welcome, no pressure to know the answers.</div>
+          <div class="accom-tags"><span class="accom-tag">Step-free</span><span class="accom-tag">Hearing loop</span></div>
+        </div>
+        <div class="ticket-foot">
+          <div class="ticket-duration mono">1.5 HRS</div>
+          <a class="ticket-cta" href="https://docs.google.com/forms/d/e/1FAIpQLSc1AjPhKJ-h8THwsUmltYlM3a4mO9tKdsy1CMMunL63yKx8bA/viewform" target="_blank">Reserve →</a>
+        </div>
+      </div>
+
+      <div class="ticket">
+        <div class="ticket-notch"></div><div class="ticket-notch right"></div>
+        <div class="ticket-img" style="background:#2B3E33;">painting studio</div>
+        <div class="ticket-body">
+          <div class="ticket-cat mono">Workshop</div>
+          <div class="ticket-title">Watercolor Sunday</div>
+          <div class="ticket-desc">Small-group painting session, all materials included, zero experience required.</div>
+          <div class="accom-tags"><span class="accom-tag">Step-free</span><span class="accom-tag">Seated throughout</span></div>
+        </div>
+        <div class="ticket-foot">
+          <div class="ticket-duration mono">2 HRS</div>
+          <a class="ticket-cta" href="https://docs.google.com/forms/d/e/1FAIpQLSc1AjPhKJ-h8THwsUmltYlM3a4mO9tKdsy1CMMunL63yKx8bA/viewform" target="_blank">Reserve →</a>
+        </div>
+      </div>
+
+      <div class="ticket">
+        <div class="ticket-notch"></div><div class="ticket-notch right"></div>
+        <div class="ticket-img" style="background:#3E2E23;">wine bar</div>
+        <div class="ticket-body">
+          <div class="ticket-cat mono">Tasting</div>
+          <div class="ticket-title">Coastal Wine Flight</div>
+          <div class="ticket-desc">A guided tasting of five regional wines with a local sommelier &mdash; and good conversation.</div>
+          <div class="accom-tags"><span class="accom-tag">Wheelchair accessible</span><span class="accom-tag">Quiet room option</span></div>
+        </div>
+        <div class="ticket-foot">
+          <div class="ticket-duration mono">1.5 HRS</div>
+          <a class="ticket-cta" href="https://docs.google.com/forms/d/e/1FAIpQLSc1AjPhKJ-h8THwsUmltYlM3a4mO9tKdsy1CMMunL63yKx8bA/viewform" target="_blank">Reserve →</a>
+        </div>
+      </div>
+
+      <div class="ticket">
+        <div class="ticket-notch"></div><div class="ticket-notch right"></div>
+        <div class="ticket-img" style="background:#233A4A;">trailhead</div>
+        <div class="ticket-body">
+          <div class="ticket-cat mono">Excursion</div>
+          <div class="ticket-title">Ridgeline Hike &amp; Lunch</div>
+          <div class="ticket-desc">An easy-paced group trail walk ending with lunch at a local spot. Transport included.</div>
+          <div class="accom-tags"><span class="accom-tag">Adjustable pace</span><span class="accom-tag">Rest stops built in</span></div>
+        </div>
+        <div class="ticket-foot">
+          <div class="ticket-duration mono">4 HRS</div>
+          <a class="ticket-cta" href="https://docs.google.com/forms/d/e/1FAIpQLSc1AjPhKJ-h8THwsUmltYlM3a4mO9tKdsy1CMMunL63yKx8bA/viewform" target="_blank">Reserve →</a>
+        </div>
+      </div>
+
+      <div class="ticket">
+        <div class="ticket-notch"></div><div class="ticket-notch right"></div>
+        <div class="ticket-img" style="background:#4A2E36;">pottery wheel</div>
+        <div class="ticket-body">
+          <div class="ticket-cat mono">Workshop</div>
+          <div class="ticket-title">Pottery Wheel Basics</div>
+          <div class="ticket-desc">Hands-on studio time with a working potter. You leave with something you made.</div>
+          <div class="accom-tags"><span class="accom-tag">Seated option</span><span class="accom-tag">Step-free</span></div>
+        </div>
+        <div class="ticket-foot">
+          <div class="ticket-duration mono">2 HRS</div>
+          <a class="ticket-cta" href="https://docs.google.com/forms/d/e/1FAIpQLSc1AjPhKJ-h8THwsUmltYlM3a4mO9tKdsy1CMMunL63yKx8bA/viewform" target="_blank">Reserve →</a>
+        </div>
+      </div>
+
+      <div class="ticket">
+        <div class="ticket-notch"></div><div class="ticket-notch right"></div>
+        <div class="ticket-img" style="background:#463A22;">live venue</div>
+        <div class="ticket-body">
+          <div class="ticket-cat mono">Social</div>
+          <div class="ticket-title">Jazz &amp; Supper Club</div>
+          <div class="ticket-desc">A live set at a local jazz room, with a set dinner menu and a reserved table.</div>
+          <div class="accom-tags"><span class="accom-tag">Hearing loop</span><span class="accom-tag">Wheelchair accessible</span></div>
+        </div>
+        <div class="ticket-foot">
+          <div class="ticket-duration mono">3 HRS</div>
+          <a class="ticket-cta" href="https://docs.google.com/forms/d/e/1FAIpQLSc1AjPhKJ-h8THwsUmltYlM3a4mO9tKdsy1CMMunL63yKx8bA/viewform" target="_blank">Reserve →</a>
+        </div>
+      </div>
+
+      <div class="ticket">
+        <div class="ticket-notch"></div><div class="ticket-notch right"></div>
+        <div class="ticket-img" style="background:#233F3A;">spa entrance</div>
+        <div class="ticket-body">
+          <div class="ticket-cat mono">Wellness</div>
+          <div class="ticket-title">Holistic Spa Day</div>
+          <div class="ticket-desc">A half-day of massage, sauna, and quiet lounge time &mdash; no diagnosis or prescription needed to book.</div>
+          <div class="accom-tags"><span class="accom-tag">Step-free</span><span class="accom-tag">Wellness-card eligible</span></div>
+        </div>
+        <div class="ticket-foot">
+          <div class="ticket-duration mono">3 HRS</div>
+          <a class="ticket-cta" href="https://docs.google.com/forms/d/e/1FAIpQLSc1AjPhKJ-h8THwsUmltYlM3a4mO9tKdsy1CMMunL63yKx8bA/viewform" target="_blank">Reserve →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="paying">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow mono">Choosing your plan</div>
+      <h2 style="color:var(--text-light);">Two ways to belong.<br>Both make sense.</h2>
+    </div>
+    <div class="tier-grid">
+      <div class="tier-card">
+        <div class="tier-label mono">Set Plan</div>
+        <h3>A steady, known amount each month</h3>
+        <p>Built for members working with a fixed monthly amount &mdash; a benefit-card allowance, a set budget, or simply a number you'd rather not think about twice. Your Navigator helps you get the most from it, and you'll never be surprised by the total.</p>
+        <div class="tier-fit"><strong>Good fit if:</strong> you're spending benefit dollars, or you like knowing the number in advance.</div>
+      </div>
+      <div class="tier-card">
+        <div class="tier-label mono">Open Plan</div>
+        <h3>Spend as much as feels right</h3>
+        <p>Built for members who'd rather not cap a good thing. Book as often as you like, add experiences as they catch your eye, and settle up on your own schedule.</p>
+        <div class="tier-fit"><strong>Good fit if:</strong> your calendar is the priority and the budget is flexible.</div>
+      </div>
+    </div>
+
+    <div class="section-head" style="margin-bottom:32px;">
+      <div class="eyebrow mono">Paying your way</div>
+      <h2 style="color:var(--text-light);">Every member pays differently.<br>That's the point.</h2>
+    </div>
+    <div class="pay-grid">
+      <div class="pay-card">
+        <div class="pay-icon">$</div>
+        <h3>Pay in full</h3>
+        <p>Straightforward membership pricing, charged monthly. No hidden fees, no surprise add-ons.</p>
+      </div>
+      <div class="pay-card">
+        <div class="pay-icon">%</div>
+        <h3>Sliding scale</h3>
+        <p>Tell us what fits your budget. We'd rather have you at the table than pricing you out of it.</p>
+      </div>
+      <div class="pay-card">
+        <div class="pay-icon">♥</div>
+        <h3>Wellness &amp; benefit dollars</h3>
+        <p>Many Medicare Advantage plans include flex or wellness-card allowances that cover activities like these. Use them toward your membership, split with another payment method for the rest.</p>
+      </div>
+    </div>
+    <div class="concierge-note">
+      <div class="badge mono">Advocate</div>
+      <p>Benefit cards are genuinely confusing &mdash; different plans, different rules, different renewal dates. Your Advocate will help you figure out exactly what your card covers and set up split payment, so the benefit dollars you already have go toward the life you actually want to live.</p>
+    </div>
+  </div>
+</section>
+
+<section class="cta" id="join">
+  <div class="wrap">
+    <h2>Ready to saunter by?</h2>
+    <p>We're onboarding members now. Reach out anytime!</p>
+    <form class="cta-form" id="waitlistForm2">
+      <input type="email" id="waitlistEmail2" placeholder="you@email.com" required />
+      <button type="submit">Join waitlist</button>
+    </form>
+  </div>
+</section>
+
+<section class="wl-section" id="waitlist-form">
+  <a class="wl-card" href="https://docs.google.com/forms/d/e/1FAIpQLSc1AjPhKJ-h8THwsUmltYlM3a4mO9tKdsy1CMMunL63yKx8bA/viewform" target="_blank" rel="noopener">
+    <div class="wl-head">
+      <div class="eyebrow mono">Saunterby &middot; Waitlist</div>
+      <h2>Join the waitlist</h2>
+      <p>We're onboarding our first members by hand. Tell us a bit about you, and a real person will follow up personally &mdash; not an automated funnel. Tap anywhere on this card to open the form.</p>
+    </div>
+    <div class="wl-body">
+      <div class="wl-tag mono">About you</div>
+      <div class="wl-field">
+        <div class="wl-label">Name<span class="wl-req">*</span></div>
+        <div class="wl-input">Your full name</div>
+      </div>
+      <div class="wl-field">
+        <div class="wl-label">Email<span class="wl-req">*</span></div>
+        <div class="wl-input">you@email.com</div>
+      </div>
+      <div class="wl-field">
+        <div class="wl-label">Phone</div>
+        <div class="wl-help">Optional &mdash; only if you'd like a call instead of email</div>
+        <div class="wl-input">(555) 555-5555</div>
+      </div>
+      <div class="wl-field">
+        <div class="wl-label">City / ZIP code</div>
+        <div class="wl-help">Helps us know where to launch first</div>
+        <div class="wl-input">e.g. Los Angeles, CA 90012</div>
+      </div>
+
+      <hr class="wl-divider" />
+      <div class="wl-tag mono">What you're into</div>
+      <div class="wl-field">
+        <div class="wl-label">What sounds most fun to you?</div>
+        <div class="wl-help">Check as many as you like</div>
+        <div class="wl-chips">
+          <div class="wl-chip"><span class="box"></span>Painting &amp; art workshops</div>
+          <div class="wl-chip"><span class="box"></span>Wine &amp; tasting events</div>
+          <div class="wl-chip"><span class="box"></span>Hikes &amp; outdoor excursions</div>
+          <div class="wl-chip"><span class="box"></span>Pottery &amp; hands-on crafts</div>
+          <div class="wl-chip"><span class="box"></span>Live music &amp; social nights</div>
+          <div class="wl-chip"><span class="box"></span>Qigong &amp; gentle movement</div>
+          <div class="wl-chip"><span class="box"></span>Trivia &amp; game nights</div>
+          <div class="wl-chip"><span class="box"></span>Spa &amp; wellness days</div>
+          <div class="wl-chip"><span class="box"></span>Something else</div>
+        </div>
+      </div>
+
+      <hr class="wl-divider" />
+      <div class="wl-tag mono">Benefits you already have</div>
+      <div class="wl-field">
+        <div class="wl-label">Do any of these already apply to you?</div>
+        <div class="wl-help">This helps us figure out how your membership can work with what you have &mdash; no wrong answers, "not sure" is a perfectly good one</div>
+        <div class="wl-chips">
+          <div class="wl-chip"><span class="box"></span>Medicare Advantage wellness / flex card</div>
+          <div class="wl-chip"><span class="box"></span>SilverSneakers</div>
+          <div class="wl-chip"><span class="box"></span>Silver&amp;Fit</div>
+          <div class="wl-chip"><span class="box"></span>One Pass</div>
+          <div class="wl-chip"><span class="box"></span>FitOn Health</div>
+          <div class="wl-chip"><span class="box"></span>ClassPass</div>
+          <div class="wl-chip"><span class="box"></span>None of these</div>
+          <div class="wl-chip"><span class="box"></span>Not sure</div>
+        </div>
+      </div>
+
+      <hr class="wl-divider" />
+      <div class="wl-tag mono">Anything else</div>
+      <div class="wl-field">
+        <div class="wl-label">Anything you'd want us to know?</div>
+        <div class="wl-help">Accessibility needs, transportation needs, or just what you're hoping for &mdash; totally optional</div>
+        <div class="wl-input">Write here...</div>
+      </div>
+
+      <div class="wl-submit-row">
+        <span class="wl-submit">Open the form &rarr;</span>
+      </div>
+    </div>
+    <div class="wl-foot">
+      <span>SAUNTERBY &middot; FOUNDING WAITLIST</span>
+      <div class="wl-barcode"></div>
+    </div>
+  </a>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="logo" style="font-size:18px;color:var(--text-dark);"><span class="dot" style="width:7px;height:7px;"></span>SAUNTERBY</div>
+    <div class="foot-note">Early-stage, human-run MVP &mdash; waitlist collected via Google Form, every booking, ride, and benefit question handled by a real Navigator, on purpose, for now.</div>
+  </div>
+</footer>
+
+<script>
+  // =========================================================================
+  // GOOGLE FORM SETUP — read this before going live
+  // 1. Create your waitlist form at forms.google.com
+  // 2. Get its shareable link (Send button → link icon), it looks like:
+  //    https://docs.google.com/forms/d/e/XXXXXXXXXXXX/viewform
+  // 3. Paste that link below, replacing GOOGLE_FORM_URL's placeholder value.
+  // 4. Optional (more advanced): to pre-fill the email field automatically,
+  //    open your form, click the 3-dot menu → "Get pre-filled link", fill in
+  //    a sample email, copy the generated link, and find the "entry.XXXXXXX"
+  //    parameter in it — replace EMAIL_ENTRY_ID below with that value.
+  //    If you skip this step, the form just opens normally and the visitor
+  //    re-enters their email once on your Google Form — still totally fine.
+  // =========================================================================
+  const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSc1AjPhKJ-h8THwsUmltYlM3a4mO9tKdsy1CMMunL63yKx8bA/viewform";
+  const EMAIL_ENTRY_ID = ""; // e.g. "entry.123456789" — leave blank to skip pre-fill
+
+  function handleWaitlistSubmit(formId, emailId) {
+    const form = document.getElementById(formId);
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      const email = document.getElementById(emailId).value;
+      const confirm = document.getElementById('formConfirm');
+      if (confirm) { confirm.style.display = 'block'; }
+
+      let destination = GOOGLE_FORM_URL;
+      if (EMAIL_ENTRY_ID) {
+        destination += `?usp=pp_url&${EMAIL_ENTRY_ID}=${encodeURIComponent(email)}`;
+      }
+      window.open(destination, '_blank');
+      form.reset();
+    });
+  }
+  handleWaitlistSubmit('waitlistForm', 'waitlistEmail');
+  handleWaitlistSubmit('waitlistForm2', 'waitlistEmail2');
+
+</script>
+
+<a class="form-tab" href="#waitlist-form">Join Waitlist</a>
+
+
+</body>
+</html>
